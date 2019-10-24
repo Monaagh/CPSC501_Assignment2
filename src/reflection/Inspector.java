@@ -21,48 +21,60 @@ public class Inspector {
     	
     	//while (!c.equals(Object.class) && count == 0) {
     	//while (count == 0) {
-    		
-    		if (c.equals(Object.class)) {
-    			count++;
+    		if (c.isArray()) {
+    			System.out.println(c.getName() + " is an array");
+    			//TO DO
+    		} else {
+	    		if (c.equals(Object.class)) {
+	    			count++;
+	    		}
+	    		//System.out.println("/////////////////// " + count + "///////////////");
+	    		System.out.println();
+	    		printIndent(d);
+	    		System.out.println("***************Inspection for Class '" + c.getName()+ "***************\n");
+	    		getClassName(c, d);
+	    		
+	    		//inspectSuperClass(c, d);    		
+	    		if (count != 1) {
+	    			
+	    			printIndent(dep);
+	    	    	System.out.println("--------------Inspecting Immediate Superclass--------------");
+	    	    	
+	    			printIndent(dep);
+	    			System.out.println("Superclass name:" + c.getSuperclass().getName());
+	    			dep = dep +1;
+	    			inspectClass(c.getSuperclass(), obj, recursive, dep);	
+	    		}
+	    		
+	    		//printIndent(d);
+	    		//System.out.println("***************Continue Inspection for Class '" + c.getName()+ "***************\n");
+	    		
+	    		inspectInterface(c, obj, d);
+	    		inspectConstructor(c, d);
+	    		inspectMethod(c,d);
+	    		inspectField(c, obj, d);
+	    		//c = c.getSuperclass();
+	    		d++;
     		}
-    		System.out.println("/////////////////// " + count + "///////////////");
-    		
-    		printIndent(d);
-    		System.out.println("***************Inspection for Class '" + c.getName()+ "'***************");
-    		getClassName(c, d);
-    		
-    		//inspectSuperClass(c, d);    		
-    		if (count != 1) {
-    			dep = dep +1;
-    			printIndent(dep);
-    			System.out.println("Superclass name:" + c.getSuperclass().getName());
-    			inspectClass(c.getSuperclass(), obj, recursive, dep);	
-    		}
-    		
-    		printIndent(d);
-    		System.out.println("***************Continue Inspection for Class '" + c.getName()+ "'***************");
-    		
-    		inspectInterface(c, obj, d);
-    		inspectConstructor(c, d);
-    		inspectMethod(c,d);
-    		inspectField(c, obj, d);
-    		//c = c.getSuperclass();
-    		d++;  
     		   		
     	}
     	
 
     private void inspectConstructor(Class c, int depth) {
-    	
+    	int index=0;
     	//get all constructors
-    	Constructor[] allConstructors = c.getDeclaredConstructors(); 
-    	
+    	Constructor[] allConstructors = c.getDeclaredConstructors();
+    	printIndent(depth);
+    	System.out.println("--------------Inspecting Declared Constructors--------------");
     	// print information for all constructors
     	for (Constructor cons: allConstructors) {
     		
+    		printIndent(depth);
+    		System.out.println("Constructor #" + index++);
+    		
     		//constructor name
     		printIndent(depth);
-    		System.out.println("Constructor Name: " + cons.getName());
+    		System.out.println(" Constructor Name: " + cons.getName());
     		
     		// constructor parameter types
     		printIndent(depth);
@@ -86,16 +98,20 @@ public class Inspector {
     }
     
     private void inspectMethod(Class c, int depth) {
-    	
+    	int index=0;
     	//get all declared methods
     	Method[] methods = c.getDeclaredMethods();
     	
+    	printIndent(depth);
+    	System.out.println("--------------Inspecting Declared Methods--------------");
+    	
     	// get information for each method
     	for (Method method: methods) {
-    	
+    		printIndent(depth);
+    		System.out.println("Method #" + index++);
     		// method name
     		printIndent(depth);
-    		System.out.println("Method name: " + method.getName());
+    		System.out.println(" Method name: " + method.getName());
     		
     		//method exceptions
     		printIndent(depth);
@@ -136,9 +152,12 @@ public class Inspector {
     }
     
     private void inspectField(Class c, Object obj, int depth) {
-    	
+    	int index = 0;
     	//get all fields
     	Field[] fields = c.getDeclaredFields();
+    	
+    	printIndent(depth);
+    	System.out.println("--------------Inspecting Declared Fields--------------");
     	
     	if (fields.length == 0) {
     		printIndent(depth);
@@ -148,9 +167,12 @@ public class Inspector {
     	//get information for each field
     	for (Field field : fields) {
     		
+    		printIndent(depth);
+    		System.out.println("Field #" + index++);
+    		
     		//field name
     		printIndent(depth);
-    		System.out.println("Field Name: " + field.getName());
+    		System.out.println(" Field Name: " + field.getName());
     		
     		//field type
     		printIndent(depth);
@@ -232,25 +254,40 @@ public class Inspector {
 		int d = depth;
 		//Object obj = null;
 		//Array allInterfaces;
+		
 		printIndent(depth);
-		System.out.println("Interfaces: ");
+    	System.out.println("--------------Inspecting Implemented Interfaces--------------");
+    	
+    	
+		//printIndent(depth);
+		//System.out.println("Interfaces: ");
 		Class[] interfaces = c.getInterfaces();
 		//allInterfaces.add(interfaces);
 		if (interfaces.length != 0) {
 			for (int i = 0; i < interfaces.length; i++ ) {
-				printIndent(depth);
+				printIndent(d);
+				System.out.println("Interface #" + i);
+				
+				printIndent(d);
 				System.out.println(" Interface name: " + interfaces[i].getName());
-				printIndent(depth);
-	    		System.out.println("***************Inspection for Interface '" + interfaces[i].getName()+ "'***************");
+				
 	    		d++;
+	    		System.out.println();
+				printIndent(d);
+	    		System.out.println("***************Inspection for Interface '" + interfaces[i].getName()+ "'***************\n");
+	    		
 	    		inspectInterface(interfaces[i], obj, d);
-	    		printIndent(depth);
-	    		System.out.println("***************Continue Inspection for Interface '" + interfaces[i].getName()+ "'***************");
+	    		
+	    		System.out.println();
+	    		printIndent(d);
+	    		System.out.println("***************Continue Inspection for Interface '" + interfaces[i].getName()+ "'***************\n");
 	    		
 	    		inspectMethod(interfaces[i], d);
 	    		inspectField(interfaces[i], obj, d);
-	    		printIndent(depth);
-	    		System.out.println("***************Finished Inspection for Interface '" + interfaces[i].getName()+ "'***************");
+	    		
+	    		System.out.println();
+	    		printIndent(d);
+	    		System.out.println("***************Finished Inspection for Interface '" + interfaces[i].getName()+ "'***************\n");
 				
 				
 				
@@ -283,6 +320,10 @@ public class Inspector {
 	}
 
 	private void inspectSuperClass(Class c, int depth) {
+		
+		printIndent(depth);
+    	System.out.println("--------------Inspecting Immediate Superclass--------------");
+    	
 		printIndent(depth);
 		System.out.println("Superclass name:" );
 		printIndent(depth);
@@ -290,6 +331,10 @@ public class Inspector {
 	}
     
     public void getClassName(Class c, int depth) {
+    	
+    	printIndent(depth);
+    	System.out.println("--------------Inspecting Class Name--------------");
+    	
     	printIndent(depth);
     	System.out.println("Class name: "  +c.getName());
     }

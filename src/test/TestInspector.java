@@ -8,7 +8,9 @@ import org.junit.After;
 
 public class TestInspector {
 	ClassA a;
+	ClassB[] bArray;
 	ClassB b;
+	String str;
 	Boolean recursive;
 	
 	
@@ -23,9 +25,9 @@ public class TestInspector {
 	public void TestClassName() throws Exception {
 		a = new ClassA();
 		b = new ClassB();
+		bArray = new ClassB[12];
+		str = "Test String";
 		new Inspector().inspect(b, recursive);
 	}
-	
-	
 	
 }
