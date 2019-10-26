@@ -1,9 +1,6 @@
 package reflection;
 
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Inspector {
 
@@ -27,8 +24,7 @@ public class Inspector {
 		printIndent(d);
 		System.out.println("***************Inspection for Class '" + c.getName()+ "***************\n");
 	    getClassName(c, d);
-	    		
-	    //inspectSuperClass(c, d);    		
+	    		  		
 	  	if (count != 1) {
 	    			
 	    	printIndent(dep);
@@ -68,13 +64,13 @@ public class Inspector {
 				
 		printIndent(depth);
 					
-		int length= Array.getLength(obj);
-		System.out.println("  Array Length: " + length);
+		//int length= Array.getLength(obj);
+		System.out.println("  Array Length: " + Array.getLength(obj));
 					
 		//array content
 		printIndent(depth);
 		System.out.print("  Array Content: ");
-		for (int i = 0; i< length; i++) {    
+		for (int i = 0; i< Array.getLength(obj); i++) {    
 			
 			Object arrayElement = Array.get(obj,  i);	
 			System.out.print(arrayElement + " ");
@@ -352,6 +348,7 @@ public class Inspector {
     	printIndent(depth);
     	System.out.println("Class name: "  +c.getName());
     }
+    
     
     public void printIndent(int depth) {
     	for (int i = 0; i < depth; i++) {
