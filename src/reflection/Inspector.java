@@ -27,7 +27,6 @@ public class Inspector {
 	    getClassName(c, d);
 	    		  		
 	  	if (count != 1) {
-	  		
 	  		inspectSuperClass(c, obj, recursive, dep);
 	    }
 	    		
@@ -39,7 +38,7 @@ public class Inspector {
 	    inspectMethod(c,d);
 	    inspectField(c, obj, d, recursive);
 	    
-	    //handle array object
+	    //handle array objects
 	    if (c.isArray()) {
 	    	inspectArray(c, obj, recursive, depth, d);   					
 	    }
@@ -50,26 +49,29 @@ public class Inspector {
 		d++;
     }
 
+    
+   
 	public void inspectArray(Class c, Object obj, boolean recursive, int depth, int d) {
+		
 		printIndent(depth);
 		System.out.println("  Array Name: " + c.getName());
 				
-		//array component type
+
 		printIndent(depth);
 		System.out.println("  Array Component Type: " +  c.getComponentType().getName());
 				
-		printIndent(depth);
-					
-		//int length= Array.getLength(obj);
+		printIndent(depth);			
 		System.out.println("  Array Length: " + Array.getLength(obj));
 					
-		//array content
+		//printing array content
 		printIndent(depth);
 		System.out.print("  Array Content: ");
 		for (int i = 0; i< Array.getLength(obj); i++) {    
 			
 			Object arrayElement = Array.get(obj,  i);	
 			System.out.print(arrayElement + " ");
+			
+			//if array elements is not null and 
 			if (arrayElement != null) {
 				if (recursive) {
 					
@@ -81,6 +83,7 @@ public class Inspector {
 					+ arrayElementClass + " ***************");
 					
 					inspectClass(arrayElementClass, arrayElement, recursive, d);
+					
 					System.out.println();
 					printIndent(d);
 					System.out.println("***************Finished Inspection for element " + i + ": "+ arrayElement.getClass().getName()+ "***************\n");
@@ -124,7 +127,7 @@ public class Inspector {
     		} else {
     			System.out.print("No parameter");
     		}
-    		
+   
     		System.out.println();
     		
     		//constructor modifier
@@ -133,6 +136,7 @@ public class Inspector {
     	}
     	
     }
+    
     
     private void inspectMethod(Class c, int depth) {
     	int index=0;
@@ -146,10 +150,13 @@ public class Inspector {
     		printIndent(depth);
     		System.out.println("No Methods");
     	}
+    	
     	// get information for each method
     	for (Method method: methods) {
+    		
     		printIndent(depth);
     		System.out.println("Method #" + index++);
+    		
     		// method name
     		printIndent(depth);
     		System.out.println(" Method name: " + method.getName());
@@ -165,6 +172,8 @@ public class Inspector {
     		} else {
     			System.out.print("No Exception thrown");
     		}
+    		
+    		
     		System.out.println();
     		
     		//method parameter types
@@ -178,6 +187,8 @@ public class Inspector {
     		} else {
     			System.out.print("No parameter");
     		}
+    		
+    		
     		System.out.println();
     		
     		//method return type
@@ -187,14 +198,15 @@ public class Inspector {
     		//method modifier
     		printIndent(depth);
     		System.out.println(" Modifier: " + getModifierString(method.getModifiers()));
-    		
-    		
+    		    		
     	}
     }
+    
     
     private void inspectField(Class c, Object obj, int depth, boolean recursive) {
     	int index = 0;
     	int d = depth+1;
+    	
     	//get all fields
     	Field[] fields = c.getDeclaredFields();
     	
@@ -205,7 +217,7 @@ public class Inspector {
     		printIndent(depth);
     		System.out.println("No Field");
     	}
-    	//check for field array
+
     	//get information for each field
     	for (Field field : fields) {
     		
@@ -232,52 +244,53 @@ public class Inspector {
 				System.out.println(e);
 			}
 
-    		//field current value
+    		//if a field in not an array
     		if (!field.getType().isArray()) {
-    			
-    			
+    				
     			printIndent(depth);
-    				// if a field is primitive
+    			
+    			// if a field is primitive
     			if (field.getType().isPrimitive()) {
-    				//Object value = field.get(obj);
     				System.out.println(" Filed Value: " + value);
     			} 
     				
     			// if field is a reference object
    				else {
-   					int hashcode = System.identityHashCode(field);
-   					String reference = Integer.toHexString(hashcode);
-   					if (value != null) {
-    					System.out.println(" Field Value: " + value.getClass().getName() + "@" + reference);
-    					
-    					//recursion on fields
-    					if (recursive) {
-	    					System.out.println();
-	    					printIndent(d);
-	    					System.out.println("***************Inspection for field " + field.getName() + " with type "
-	    					+ field.getType() + " ***************");
-	    					Class fieldClass = value.getClass();
-	    					inspectClass(fieldClass, value, recursive, d);
-	    					System.out.println();
-	    					printIndent(d);
-	    					System.out.println("***************Finished Inspection for field " + field.getName()+ "***************\n");
-    					}
-   					
-   					} else {
-    					System.out.println(" Field value: null");
-    				}
+   					inspectFieldObject(recursive, d, field, value);
    				}
     		} else {
     			
     			field.setAccessible(true);
-    			inspectArray(value.getClass(), value, recursive, depth, d );
-    				
-    			System.out.println();
-    			
-    			
+    			inspectArray(value.getClass(), value, recursive, depth, d );	
+    			System.out.println();		
     		}
     	}
     }
+
+	
+    public void inspectFieldObject(boolean recursive, int d, Field field, Object value) {
+		int hashcode = System.identityHashCode(field);
+		String reference = Integer.toHexString(hashcode);
+		if (value != null) {
+			System.out.println(" Field Value: " + value.getClass().getName() + "@" + reference);
+			
+			//recursion on object fields
+			if (recursive) {
+				System.out.println();
+				printIndent(d);
+				System.out.println("***************Inspection for field " + field.getName() + " with type "
+				+ field.getType() + " ***************");
+				Class fieldClass = value.getClass();
+				inspectClass(fieldClass, value, recursive, d);
+				System.out.println();
+				printIndent(d);
+				System.out.println("***************Finished Inspection for field " + field.getName()+ "***************\n");
+			}
+		
+		} else {
+			System.out.println(" Field value: null");
+		}
+	}
     
     
 	private void inspectInterface(Class c, Object obj, int depth, boolean recursive) {
@@ -288,7 +301,6 @@ public class Inspector {
 		printIndent(depth);
     	System.out.println("--------------Inspecting Implemented Interfaces--------------");
     	
-
 		Class[] interfaces = c.getInterfaces();
 		if (interfaces.length != 0) {
 			for (int i = 0; i < interfaces.length; i++ ) {
@@ -298,12 +310,12 @@ public class Inspector {
 				printIndent(depth);
 				System.out.println(" Interface name: " + interfaces[i].getName());
 				
-	    		//depth++;
+
 	    		System.out.println();
 				printIndent(d);
 	    		System.out.println("***************Inspection for Interface '" + interfaces[i].getName()+ "'***************\n");
 	    		
-	    		//d++;
+	    		//recursion on interface
 	    		inspectInterface(interfaces[i], obj, d, recursive);
 	    		
 	    		System.out.println();
@@ -333,9 +345,13 @@ public class Inspector {
     	printIndent(depth);
     	System.out.println("Superclass name:" + c.getSuperclass().getName());
     	depth++;
+    	
+    	//recursion on suerclass
     	inspectClass(c.getSuperclass(), obj, recursive, depth);	
 	}
     
+	
+	
     public void getClassName(Class c, int depth) {
     	
     	printIndent(depth);
@@ -345,14 +361,7 @@ public class Inspector {
     	System.out.println("Class name: "  +c.getName());
     }
     
-    
-    public void printIndent(int depth) {
-    	for (int i = 0; i < depth; i++) {
-			System.out.print("\t");
-		}
-    }
-    
-    
+   
     public String getModifierString(int mod) {
     	String modifier = null; 
     	if (Modifier.isPublic(mod)) {
@@ -381,8 +390,15 @@ public class Inspector {
     		modifier = "Strict";
     	}
     	
-    	
     	return modifier;
+    }
+    
+    
+    // print indentation based on depth
+    public void printIndent(int depth) {
+    	for (int i = 0; i < depth; i++) {
+			System.out.print("\t");
+		}
     }
 
 }
