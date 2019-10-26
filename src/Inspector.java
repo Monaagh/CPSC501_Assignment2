@@ -238,7 +238,7 @@ public class Inspector {
     		
     		//field modifier
     		printIndent(depth);
-    		System.out.println(" Field modifer: " + getModifierString(field.getModifiers()));
+    		System.out.println(" Field modifier: " + getModifierString(field.getModifiers()));
     		
     		field.setAccessible(true);
 			Object value = null; 
