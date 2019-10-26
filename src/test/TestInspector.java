@@ -38,7 +38,7 @@ public class TestInspector {
 		recursive = true;
 		a = new ClassA(12);
 		new Inspector().inspect(a, recursive);
-	}
+	}*/
 	
 	@Test
 	public void TestClassB() throws Exception {
@@ -47,7 +47,7 @@ public class TestInspector {
 		new Inspector().inspect(b, recursive);
 	}
 	
-	@Test
+	/*@Test
 	public void TestClassD() throws Exception {
 		recursive = true;
 		d = new ClassD();
@@ -82,12 +82,12 @@ public class TestInspector {
 		new Inspector().inspect(bArray, recursive);
 	}*/
 	
-	@Test
+	/*8@Test
 	public void TestClass2DArray() throws Exception {
 		recursive = true;
 		bArray2 = new ClassB[12][12];
 		new Inspector().inspect(bArray2, recursive);
-	}
+	}*/
 	
 	
 	/*@Test

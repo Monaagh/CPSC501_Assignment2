@@ -18,13 +18,11 @@ public class Inspector {
     	int count = 0;
     	int dep = depth;
     	
-    	//while (!c.equals(Object.class) && count == 0) {
-    	//while (count == 0) {
     	
 	    if (c.equals(Object.class)) {
 	    	count++;
   		}
-	    //System.out.println("/////////////////// " + count + "///////////////");
+
 		System.out.println();
 		printIndent(d);
 		System.out.println("***************Inspection for Class '" + c.getName()+ "***************\n");
@@ -49,52 +47,9 @@ public class Inspector {
 	    inspectConstructor(c, d);
 	    inspectMethod(c,d);
 	    inspectField(c, obj, d, recursive);
-	    //c = c.getSuperclass();
 	    		
 	    if (c.isArray()) {
-
-	    	printIndent(depth);
-	    	System.out.println("  Array Name: " + c.getName());
-	    			
-	    	//array component type
-	    	printIndent(depth);
-	    	System.out.println("  Array Component Type: " +  c.getComponentType().getName());
-	    			
-	    	//try{
-	    				//array length
-	    	printIndent(depth);
-	    	//c.setAccessible(true);
-	    				
-	    	int length= Array.getLength(obj);
-	    	System.out.println("  Array Length: " + length);
-	    	//System.out.println(field.get(c.newInstance()));
-	    				
-	    	//array content
-	    	printIndent(depth);
-	    	System.out.print("  Array Content: ");
-	    	for (int i = 0; i< length; i++) {    
-	    		
-	    		Object arrayElement = Array.get(obj,  i);	
-	    		//System.out.print(Array.get(field.get(c.newInstance()), i) + " " );
-	    		System.out.print(arrayElement + " ");
-	    		if (arrayElement != null) {
-		    		if (recursive) {
-						
-						Class arrayElementClass = arrayElement.getClass();
-						
-						System.out.println();
-						printIndent(d);
-						System.out.println("***************Inspection for element " + i + ": "+ arrayElementClass.getName() + " with type "
-						+ arrayElementClass + " ***************");
-						
-						inspectClass(arrayElementClass, arrayElement, recursive, d);
-						System.out.println();
-						printIndent(d);
-						System.out.println("***************Finished Inspection for element " + i + ": "+ arrayElement.getClass().getName()+ "***************\n");
-					}
-	    		}
-	    	}
-	    					
+	    	inspectArray(c, obj, recursive, depth, d);   					
 	    }
 	    
 	    System.out.println();
@@ -102,6 +57,45 @@ public class Inspector {
 		System.out.println("***************Finished Inspection for Class '" + c.getName()+ "***************\n");
 		d++;
     }
+
+	public void inspectArray(Class c, Object obj, boolean recursive, int depth, int d) {
+		printIndent(depth);
+		System.out.println("  Array Name: " + c.getName());
+				
+		//array component type
+		printIndent(depth);
+		System.out.println("  Array Component Type: " +  c.getComponentType().getName());
+				
+		printIndent(depth);
+					
+		int length= Array.getLength(obj);
+		System.out.println("  Array Length: " + length);
+					
+		//array content
+		printIndent(depth);
+		System.out.print("  Array Content: ");
+		for (int i = 0; i< length; i++) {    
+			
+			Object arrayElement = Array.get(obj,  i);	
+			System.out.print(arrayElement + " ");
+			if (arrayElement != null) {
+				if (recursive) {
+					
+					Class arrayElementClass = arrayElement.getClass();
+					
+					System.out.println();
+					printIndent(d);
+					System.out.println("***************Inspection for element " + i + ": "+ arrayElementClass.getName() + " with type "
+					+ arrayElementClass + " ***************");
+					
+					inspectClass(arrayElementClass, arrayElement, recursive, d);
+					System.out.println();
+					printIndent(d);
+					System.out.println("***************Finished Inspection for element " + i + ": "+ arrayElement.getClass().getName()+ "***************\n");
+				}
+			}
+		}
+	}
 
     
     	    
@@ -283,46 +277,8 @@ public class Inspector {
    				}
     		} else {
     			
-    			//array name
-    			printIndent(depth);
-    			System.out.println("  Array Name: " + field.getName());
-    			
-    			//array component type
-    			printIndent(depth);
-    			System.out.println("  Array Component Type: " +  field.getType().getComponentType().getName());
-
-    			printIndent(depth);
     			field.setAccessible(true);
-    				
-    			int length= Array.getLength(value);
-    			System.out.println("  Array Length: " + length);
-    			//System.out.println(field.get(c.newInstance()));
-    				
-    			//array content
-    			printIndent(depth);
-    			System.out.print("  Array Content: ");
-    			for (int i = 0; i< length; i++) {
-    				Object arrayElement = Array.get(value,  i);	
-    				//System.out.print(Array.get(field.get(c.newInstance()), i) + " " );
-    				System.out.print(arrayElement + " ");
-    				if (arrayElement != null) {
-    					//recursion on elements
-    					if (recursive) {
-    						
-    						Class arrayElementClass = arrayElement.getClass();
-    						
-	    					System.out.println();
-	    					printIndent(d);
-	    					System.out.println("***************Inspection for element "+ i + ": " + arrayElementClass.getName() + " with type "
-	    					+ arrayElementClass + " ***************");
-	    					
-	    					inspectClass(arrayElementClass, arrayElement, recursive, d);
-	    					System.out.println();
-	    					printIndent(d);
-	    					System.out.println("***************Finished Inspection for element " + i + ": "+ arrayElement.getClass().getName()+ "***************\n");
-    					}
-    				}
-    			}
+    			inspectArray(value.getClass(), value, recursive, depth, d );
     				
     			System.out.println();
     			
