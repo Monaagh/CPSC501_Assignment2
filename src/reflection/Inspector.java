@@ -23,17 +23,12 @@ public class Inspector {
 		System.out.println();
 		printIndent(d);
 		System.out.println("***************Inspection for Class '" + c.getName()+ "***************\n");
+	
 	    getClassName(c, d);
 	    		  		
 	  	if (count != 1) {
-	    			
-	    	printIndent(dep);
-	    	System.out.println("--------------Inspecting Immediate Superclass--------------");
-	    	    	
-	    	printIndent(dep);
-	    	System.out.println("Superclass name:" + c.getSuperclass().getName());
-	    	dep = dep +1;
-	    	inspectClass(c.getSuperclass(), obj, recursive, dep);	
+	  		
+	  		inspectSuperClass(c, obj, recursive, dep);
 	    }
 	    		
 	  	//printIndent(d);
@@ -43,7 +38,8 @@ public class Inspector {
 	    inspectConstructor(c, d);
 	    inspectMethod(c,d);
 	    inspectField(c, obj, d, recursive);
-	    		
+	    
+	    //handle array object
 	    if (c.isArray()) {
 	    	inspectArray(c, obj, recursive, depth, d);   					
 	    }
@@ -329,15 +325,15 @@ public class Inspector {
 		
 	}
 
-	private void inspectSuperClass(Class c, int depth) {
-		
+	private void inspectSuperClass(Class c, Object obj, boolean recursive, int depth) {
+	
 		printIndent(depth);
     	System.out.println("--------------Inspecting Immediate Superclass--------------");
-    	
-		printIndent(depth);
-		System.out.println("Superclass name:" );
-		printIndent(depth);
-		System.out.println(" " + c.getSuperclass().getName());
+    	    	
+    	printIndent(depth);
+    	System.out.println("Superclass name:" + c.getSuperclass().getName());
+    	depth++;
+    	inspectClass(c.getSuperclass(), obj, recursive, depth);	
 	}
     
     public void getClassName(Class c, int depth) {
