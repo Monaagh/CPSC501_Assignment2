@@ -1,4 +1,3 @@
-package reflection;
 
 public final class ClassA implements java.io.Serializable, Runnable {
 

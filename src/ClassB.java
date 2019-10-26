@@ -1,4 +1,3 @@
-package reflection;
 
 public class ClassB extends ClassC implements Runnable {
 

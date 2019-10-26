@@ -1,4 +1,3 @@
-package reflection;
 
 public interface InterfaceA extends InterfaceB {
 
