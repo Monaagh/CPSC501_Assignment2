@@ -9,6 +9,7 @@ public class Inspector {
         inspectClass(c, obj, recursive, 0);
     }
 
+    //inspect classes
     private void inspectClass(Class c, Object obj, boolean recursive, int depth) {
 
     	int d = depth;
@@ -51,6 +52,7 @@ public class Inspector {
 
     
    
+    //inspect array objects and recursively inspect array elements if recursion is true
 	public void inspectArray(Class c, Object obj, boolean recursive, int depth, int d) {
 		
 		printIndent(depth);
@@ -93,7 +95,7 @@ public class Inspector {
 	}
 
     
-    	    
+    // inspect constructors	    
     private void inspectConstructor(Class c, int depth) {
     	int index=0;
     	//get all constructors
@@ -138,6 +140,7 @@ public class Inspector {
     }
     
     
+    // inspect methods
     private void inspectMethod(Class c, int depth) {
     	int index=0;
     	//get all declared methods
@@ -203,6 +206,8 @@ public class Inspector {
     }
     
     
+    // inspect fields
+    // call inspectFieldObject if a field is a reference object
     private void inspectField(Class c, Object obj, int depth, boolean recursive) {
     	int index = 0;
     	int d = depth+1;
@@ -268,6 +273,8 @@ public class Inspector {
     }
 
 	
+    // inspect field if a field is reference object
+    // recursively inspect the field if recurion is true
     public void inspectFieldObject(boolean recursive, int d, Field field, Object value) {
 		int hashcode = System.identityHashCode(field);
 		String reference = Integer.toHexString(hashcode);
@@ -293,6 +300,7 @@ public class Inspector {
 	}
     
     
+    //inspect interfaces recursively
 	private void inspectInterface(Class c, Object obj, int depth, boolean recursive) {
 		//depth++;
 		int d = depth+1;
@@ -337,6 +345,8 @@ public class Inspector {
 		
 	}
 
+	
+	// inspect superclasses recursively
 	private void inspectSuperClass(Class c, Object obj, boolean recursive, int depth) {
 	
 		printIndent(depth);
@@ -351,7 +361,7 @@ public class Inspector {
 	}
     
 	
-	
+	//print the name for each class
     public void getClassName(Class c, int depth) {
     	
     	printIndent(depth);
@@ -362,6 +372,7 @@ public class Inspector {
     }
     
    
+    // get the modifier
     public String getModifierString(int mod) {
     	String modifier = null; 
     	if (Modifier.isPublic(mod)) {
