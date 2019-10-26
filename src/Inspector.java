@@ -82,16 +82,19 @@ public class Inspector {
 					
 					Class arrayElementClass = arrayElement.getClass();
 					
-					System.out.println();
-					printIndent(d);
-					System.out.println("***************Inspection for element " + i + ": "+ arrayElementClass.getName() + " with type "
-					+ arrayElementClass + " ***************");
+					if (!arrayElementClass.equals(java.lang.Character.class)) {
 					
-					inspectClass(arrayElementClass, arrayElement, recursive, d);
-					
-					System.out.println();
-					printIndent(d);
-					System.out.println("***************Finished Inspection for element " + i + ": "+ arrayElement.getClass().getName()+ "***************\n");
+						System.out.println();
+						printIndent(d);
+						System.out.println("***************Inspection for element " + i + ": "+ arrayElementClass.getName() + " with type "
+						+ arrayElementClass + " ***************");
+						
+						inspectClass(arrayElementClass, arrayElement, recursive, d);
+						
+						System.out.println();
+						printIndent(d);
+						System.out.println("***************Finished Inspection for element " + i + ": "+ arrayElement.getClass().getName()+ "***************\n");
+					}
 				}
 			}
 		}

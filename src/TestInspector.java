@@ -1,7 +1,3 @@
-/**
- * CPSC 501 Assignment2: Reflection
- * @author: Mona Agh
- */
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -71,12 +67,12 @@ public class TestInspector {
 		new Inspector().inspect(d, recursive);
 	}
 	
-	/*@Test
+	@Test
 	public void TestClassString() throws Exception {
 		recursive = true;
 		str = "Test String";
 		new Inspector().inspect(str, recursive);
-	}*/
+	}
 	
 	@Test
 	public void TestClass1DArray() throws Exception {
