@@ -1,3 +1,7 @@
+/**
+ * CPSC 501 Assignment2: Reflection
+ * @author: Mona Agh
+ */
 
 import org.junit.Test;
 import static org.junit.Assert.*;

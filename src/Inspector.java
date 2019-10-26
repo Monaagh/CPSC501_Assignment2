@@ -1,3 +1,7 @@
+/**
+ * CPSC 501 Assignment2: Reflection
+ * @author: Mona Agh
+ */
 
 import java.lang.reflect.*;
 
